@@ -1,0 +1,44 @@
+semaphores:
+ cr_entry_mutex = 1; 
+ female_student_mutex = 1;  male_student_mutex = 1; 
+
+female_student_count = 0; 
+male_student_count = 0; 
+
+Structure of a male student process
+while (true)
+{
+	/structure of the procedure for “male_student_wants_to_enter”/
+wait (male_student_mutex);
+male_student_count++;
+if (male_student_count == 1)
+	wait(cr_entry_mutex);
+signal(male_student_mutex);
+
+
+	/* structure of the procedure for male_student_leaves*/
+	wait(male_student_mutex);
+	male_student_count--;
+	if (male_student_count == 0)
+		signal (cr_entry_mutex);
+	signal(male_student_mutex);
+}
+
+Structure of a female student process
+while (true)
+{
+	/* structure of the procedure for female_student_wants_to_enter*/
+wait (female_student_mutex);
+female_student_count++;
+if (female_student_count == 1)
+	wait(cr_entry_mutex);
+signal(female_student_mutex);
+
+
+	/* structure of the procedure for female_student_leaves*/
+	wait(female_student_mutex);
+	female_student_count--;
+	if (female_student_count == 0)
+		signal (cr_entry_mutex);
+	signal(female_student_mutex);
+}
